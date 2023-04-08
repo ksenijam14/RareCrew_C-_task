@@ -40,7 +40,7 @@ public class EmployeeController : Controller
         }
 
         chart.Series.Add(series);
-        series.Label = "#PERCENT{P0}";
+        series.Label = "#PERCENT{P1}";
         series.LegendText = "#VALX";
 
         chart.Legends.Add("Legend");
