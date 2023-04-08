@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 
+using System.Drawing;
+using System.Web.UI.DataVisualization.Charting;
+using System.Linq;
+
 public class EmployeeController : Controller
 {
     public async Task<ActionResult> Index()
@@ -14,6 +18,41 @@ public class EmployeeController : Controller
 
         //sorting descending according to total working hours
         employees.Sort((a, b) => b.WorkingTime.CompareTo(a.WorkingTime));
+
+        Chart chart = new Chart();
+
+        chart.Width = 800;
+        chart.Height = 600;
+
+        Title title = new Title("Visual display of working hours of employees");
+        title.Font = new Font("Arial", 16, FontStyle.Bold);
+        chart.Titles.Add(title);
+
+        Series series = new Series("Data");
+
+        series.ChartType = SeriesChartType.Pie;
+
+        foreach (var entry in employees)
+        {
+            double percentage = (entry.WorkingTime * 100) / employees.Sum(e => e.WorkingTime);
+        
+            series.Points.AddXY(entry.EmployeeName, percentage);
+        }
+
+        chart.Series.Add(series);
+        series.Label = "#PERCENT{P0}";
+        series.LegendText = "#VALX";
+
+        chart.Legends.Add("Legend");
+        chart.Legends["Legend"].Docking = Docking.Bottom;
+
+        chart.ChartAreas.Add(new ChartArea());
+        chart.ChartAreas[0].AxisX.Title = "X-Axis";
+        chart.ChartAreas[0].AxisY.Title = "Y-Axis";
+
+        //saving the chart to the desktop
+        string filePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\pie-chart.png";
+        chart.SaveImage(filePath, ChartImageFormat.Png);
 
         return View("Employee", employees);
     }
