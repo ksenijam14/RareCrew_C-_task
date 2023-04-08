@@ -1,0 +1,64 @@
+﻿
+@model List<NamesTime>
+@{
+    ViewBag.Title = "Employee";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="center">
+    <h1>Visual display of working hours of employees</h1>
+</div>
+<br />
+<div>
+    <table class="center employee_table">
+        <tr>
+            <th>Name</th>
+            <th id="time">Total Time Worked</th>
+        </tr>
+        @foreach (NamesTime employee in Model)
+        {
+        <tr class="@(employee.WorkingTime < 100 ? "red" : "white")">
+            <td>@employee.EmployeeName</td>
+            <td id="time">
+                @Html.DisplayFor(modelItem => employee.WorkingTime)
+            </td>
+        </tr>
+        }
+    </table>
+</div>
+
+<style>
+    .center {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .employee_table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 65%;
+    }
+
+    .employee_table td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    .employee_table th {
+        background-color: #c5c1c1;
+    }
+
+    #time {
+        text-align: center;
+    }
+
+    .red {
+        background-color: #f5bdbd;
+    }
+
+    .white {
+        background-color: white;
+    }
+</style>
